@@ -1,4 +1,4 @@
-const question = "What countries both begin and end with a vowel?";
+const question = "What countries both begin and end with a consonant?";
 
 const fs = require("fs");
 
@@ -12,16 +12,15 @@ let answer = [];
 
 for (let i = 0; i < countries.length; i++) {
   const country = countries[i];
-
   if (
-    hasVowelAtPosition(country, 0) &&
-    hasVowelAtPosition(country, country.length - 1)
+    hasConsonantAtPosition(country, 0) &&
+    hasConsonantAtPosition(country, country.length - 1)
   ) {
     answer.push(countries[i]);
   }
 }
 
-function hasVowelAtPosition(string, index) {
+function hasConsonantAtPosition(string, index) {
   const word = string.toLowerCase();
   if (
     word.charAt(index) === "a" ||
@@ -30,14 +29,10 @@ function hasVowelAtPosition(string, index) {
     word.charAt(index) === "o" ||
     word.charAt(index) === "u"
   ) {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 console.log(question);
 console.log(answer);
-
-// var country = "Albania";
-// var index = 0;
-// console.log(hasConsonantAtPosition(country, index)); // should print false
