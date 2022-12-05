@@ -15,7 +15,7 @@ let answer = [];
 babyNames.sort((a, b) => {
   return a.length - b.length;
 });
-
+console.log(babyNames[1]);
 // iterate over baby names
 for (i = 0; i < babyNames.length; i++) {
   // check if current baby name length is equal to first baby name length

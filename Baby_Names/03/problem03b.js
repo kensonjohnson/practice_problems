@@ -7,11 +7,37 @@ const fileReader = function (filepath) {
   return fs.readFileSync(filepath, "utf8").toString().trim().split(/\r?\n/);
 };
 
+console.time("Total Time");
+console.time("Setting up the Data");
 const babyNames = fileReader("../baby_names_2020_short.txt");
+const scrabbleWords = new Set(fileReader("../sowpods.txt"));
+console.timeEnd("Setting up the Data");
 
 let answer = [];
 
-//code here
+// write a function to reverse names
+function reverseWord(word) {
+  let reversed = "";
+  for (i = word.length - 1; i >= 0; i--) {
+    reversed = reversed + word.charAt(i);
+  }
+  return reversed;
+}
 
+console.time("Finding the Answer");
+
+// iterate over babyNames
+babyNames.forEach((babyName) => {
+  const reversedName = reverseWord(babyName).toUpperCase();
+  // check each name after its reversed to each scrabble word,
+  if (scrabbleWords.has(reversedName)) {
+    // if a match, store name in answer array
+    answer.push(babyName);
+  }
+});
+console.timeEnd("Finding the Answer");
+console.timeEnd("Total Time");
+
+// format the answer
 console.log(question);
 console.log(answer);
