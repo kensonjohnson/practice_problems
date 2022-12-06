@@ -11,7 +11,37 @@ const scrabbleWords = fileReader("../sowpods.txt");
 
 let answer = [];
 
-// code here
+// iterate over scrabbleWords
+scrabbleWords.forEach((word) => {
+  // create variable onlyRSTLNE to determine if a word is good to add to the answer Array
+  let onlyRSTLNE;
 
+  // iterate over current word
+  for (let i = 0; i < word.length; i++) {
+    // check if current letter is equal to R, S, T, L, N, E
+    if (
+      word.charAt(i) === "R" ||
+      word.charAt(i) === "S" ||
+      word.charAt(i) === "T" ||
+      word.charAt(i) === "L" ||
+      word.charAt(i) === "N" ||
+      word.charAt(i) === "E"
+    ) {
+      // if not a match, set onlyRSTLNE to true and keep iterating
+      onlyRSTLNE = true;
+    } else {
+      // if not a match, set onlyRSTLNE to false and break from loop
+      onlyRSTLNE = false;
+      break;
+    }
+  }
+  // after the loop, check if onlyRSTLNE is true
+  if (onlyRSTLNE) {
+    // if true, add current word to answer Array
+    answer.push(word);
+  }
+});
+
+// format answer
 console.log(question);
 console.log(answer);

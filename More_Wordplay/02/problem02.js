@@ -10,7 +10,21 @@ const scrabbleWords = fileReader("../sowpods.txt");
 
 let answer = [];
 
-// code here
+// iterate over scrabbleWords
+scrabbleWords.forEach((word) => {
+  // check if each word includes U, but does not include A, E, I, or O
+  if (
+    word.includes("U") &&
+    !word.includes("A") &&
+    !word.includes("E") &&
+    !word.includes("I") &&
+    !word.includes("O")
+  ) {
+    // if a match, save the word to the answer Array
+    answer.push(word);
+  }
+});
 
+// format answer
 console.log(question);
 console.log(answer);
