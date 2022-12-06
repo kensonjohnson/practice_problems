@@ -1,9 +1,9 @@
 const question = "What are all of the words containing UU?";
 
-const fs = require("fs");
+import { readFileSync } from "fs";
 
 const fileReader = function (filepath) {
-  return fs.readFileSync(filepath, "utf8").toString().trim().split(/\r?\n/);
+  return readFileSync(filepath, "utf8").toString().trim().split(/\r?\n/);
 };
 
 const scrabbleWords = fileReader("../sowpods.txt");
