@@ -10,7 +10,12 @@ const fileReader = function (filepath) {
 console.time("Total Time");
 console.time("Setting up the Data");
 const babyNames = fileReader("../baby_names_2020_short.txt");
-const scrabbleWords = new Set(fileReader("../sowpods.txt"));
+console.time("Setup the Array");
+const arrayOfWords = fileReader("../sowpods.txt");
+console.timeEnd("Setup the Array");
+console.time("Setup the Set");
+const scrabbleWords = new Set(arrayOfWords);
+console.timeEnd("Setup the Set");
 console.timeEnd("Setting up the Data");
 
 let answer = [];

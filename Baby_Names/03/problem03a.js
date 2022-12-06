@@ -8,7 +8,9 @@ const fileReader = function (filepath) {
 };
 console.time("Total Time");
 console.time("Setting up the Data");
+console.time("Just Baby Names");
 const babyNames = fileReader("../baby_names_2020_short.txt");
+console.timeEnd("Just Baby Names");
 const scrabbleWords = fileReader("../sowpods.txt");
 console.timeEnd("Setting up the Data");
 
