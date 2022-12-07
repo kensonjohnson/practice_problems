@@ -9,9 +9,19 @@ const fileReader = function (filepath) {
 
 const scrabbleWords = fileReader("../sowpods.txt");
 
-let answer = [];
+function howManyA(word) {
+  const toSearch = word.toUpperCase();
+  let numberOfA = 0;
 
-// code here
+  for (let i = 0; i < toSearch.length; i++) {
+    if (toSearch.charAt(i) === "A") {
+      numberOfA++;
+    }
+  }
+
+  return numberOfA;
+}
 
 console.log(question);
-console.log(answer);
+console.log(howManyA("Waiting"));
+console.log(howManyA("Aardvark"));

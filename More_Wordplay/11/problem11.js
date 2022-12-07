@@ -9,9 +9,17 @@ const fileReader = function (filepath) {
 
 const scrabbleWords = fileReader("../sowpods.txt");
 
-let answer = [];
-
-// code here
+function findPrefix(prefix) {
+  let answer = [];
+  const toFind = prefix.toUpperCase();
+  scrabbleWords.forEach((word) => {
+    if (word.startsWith(toFind)) {
+      answer.push(word);
+    }
+  });
+  return answer;
+}
 
 console.log(question);
-console.log(answer);
+console.log(findPrefix("pl").slice(0, 10));
+console.log(findPrefix("TR").slice(0, 10));

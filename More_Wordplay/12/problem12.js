@@ -9,9 +9,22 @@ const fileReader = function (filepath) {
 
 const scrabbleWords = fileReader("../sowpods.txt");
 
-let answer = [];
+function findWord(prefix, suffix, length) {
+  let answer = [];
+  const beginsWith = prefix.toUpperCase();
+  const endsWith = suffix.toUpperCase();
 
-// code here
+  scrabbleWords.forEach((word) => {
+    if (
+      word.startsWith(beginsWith) &&
+      word.endsWith(endsWith) &&
+      word.length === length
+    ) {
+      answer.push(word);
+    }
+  });
+  return answer;
+}
 
 console.log(question);
-console.log(answer);
+console.log(findWord("pl", "NG", 8));

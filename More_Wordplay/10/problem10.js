@@ -9,9 +9,18 @@ const fileReader = function (filepath) {
 
 const scrabbleWords = fileReader("../sowpods.txt");
 
-let answer = [];
+function findSubstring(subString) {
+  let answer = [];
+  const toFind = subString.toUpperCase();
 
-// code here
+  scrabbleWords.forEach((word) => {
+    if (word.includes(toFind)) {
+      answer.push(word);
+    }
+  });
+  return answer;
+}
 
 console.log(question);
-console.log(answer);
+console.log(findSubstring("rst").slice(0, 25));
+console.log(findSubstring("ING").slice(0, 25));
