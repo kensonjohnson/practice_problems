@@ -14,7 +14,10 @@ function csvToArray(str, delimiter = ",") {
   // Map the rows
   const arr = rows.map((row) => {
     // split values from each row into an array
-    const values = row.trim().split(delimiter);
+    let values = row.trim().split(delimiter);
+    if (row.includes('"')) {
+      values = handleDoubleQuotes(row, delimiter);
+    }
     // use headers.reduce to create an object
     const el = headers.reduce((object, header, index) => {
       // if there is a space between words, we need to format like a property name
@@ -38,12 +41,44 @@ function csvToArray(str, delimiter = ",") {
   return arr;
 }
 
+function handleDoubleQuotes(string, delimiter) {
+  const hasDoubleQuote = string.split('"');
+  for (let i = 0; i < hasDoubleQuote.length; i++) {
+    if (i % 2 !== 0) {
+      hasDoubleQuote[i] = hasDoubleQuote[i].replaceAll(",", "~");
+    }
+  }
+  const commasReplaced = hasDoubleQuote.join("");
+  let newRow = commasReplaced.split(delimiter);
+  for (let i = 0; i < newRow.length; i++) {
+    if (newRow[i].includes("~")) {
+      newRow[i] = newRow[i].replaceAll("~", ",");
+    }
+  }
+  return newRow;
+}
+
 const question =
   "What is the highest grossing movie from Universal Pictures, domestically?";
 
 const movies = csvToArray(fileReader("../top_movies.csv"));
 
-// Code here
+// set a variable to hold highest found number
+let maxSales = 0;
+let indexOfMovie = 0;
+
+// interate over movies
+for (let i = 0; i < movies.length; i++) {
+  // check current movie usSales against known value
+  if (movies[i].usSales !== undefined && movies[i].usSales > maxSales) {
+    // if higher, store the higher value and index of current movie
+    maxSales = movies[i].usSales;
+    indexOfMovie = i;
+  }
+}
+
+// grab movie at indexOfMovie and return as the answer
 
 console.log(question);
-console.log(movies);
+console.log(indexOfMovie);
+console.log(movies[indexOfMovie].title);

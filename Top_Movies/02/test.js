@@ -60,25 +60,6 @@ function handleDoubleQuotes(string, delimiter) {
   return newRow;
 }
 
-const question = "What movies on this list were distributed by DreamWorks?";
+const movies = csvToArray(fileReader("../test_movie.csv"));
 
-const movies = csvToArray(fileReader("../top_movies.csv"));
-
-let answer = [];
-const subString = "DreamWorks";
-
-// iterate over movies
-movies.forEach((movie) => {
-  // check if current movie is distributed by DreamWorks
-  if (
-    movie.distributor !== undefined &&
-    movie.distributor.includes(subString)
-  ) {
-    // if it is, put title of movie into the answer array
-    answer.push(movie.title);
-  }
-});
-
-console.log(question);
-console.log(answer);
-console.log(answer.length);
+console.log(movies);
