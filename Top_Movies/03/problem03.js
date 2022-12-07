@@ -14,7 +14,12 @@ function csvToArray(str, delimiter = ",") {
   // Map the rows
   const arr = rows.map((row) => {
     // split values from each row into an array
-    const values = row.trim().split(delimiter);
+    let values = row.trim().split(delimiter);
+    // If it has double qoutes, then we have a problem
+    if (row.includes('"')) {
+      // This function handles formating the values if double quotes are present
+      values = handleDoubleQuotes(row, delimiter);
+    }
     // use headers.reduce to create an object
     const el = headers.reduce((object, header, index) => {
       // if there is a space between words, we need to format like a property name
@@ -36,6 +41,23 @@ function csvToArray(str, delimiter = ",") {
 
   // return the array
   return arr;
+}
+
+function handleDoubleQuotes(string, delimiter) {
+  const hasDoubleQuote = string.split('"');
+  for (let i = 0; i < hasDoubleQuote.length; i++) {
+    if (i % 2 !== 0) {
+      hasDoubleQuote[i] = hasDoubleQuote[i].replaceAll(",", "~");
+    }
+  }
+  const commasReplaced = hasDoubleQuote.join("");
+  let newRow = commasReplaced.split(delimiter);
+  for (let i = 0; i < newRow.length; i++) {
+    if (newRow[i].includes("~")) {
+      newRow[i] = newRow[i].replaceAll("~", ",");
+    }
+  }
+  return newRow;
 }
 
 const question = "What distributor has the most films on this list? ";
