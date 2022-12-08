@@ -44,19 +44,28 @@ function csvToArray(str, delimiter = ",") {
 }
 
 function handleDoubleQuotes(string, delimiter) {
+  // split the string on the quotes
   const hasDoubleQuote = string.split('"');
+  // iterate over the new resulting array
   for (let i = 0; i < hasDoubleQuote.length; i++) {
+    // the characters we want to replace will only be on odd numbered indexes
     if (i % 2 !== 0) {
+      // replace all commas in this section of the string to tildes
       hasDoubleQuote[i] = hasDoubleQuote[i].replaceAll(",", "~");
     }
   }
+  // flatten the array back down into a single string
   const commasReplaced = hasDoubleQuote.join("");
+  // split the row on the commas
   let newRow = commasReplaced.split(delimiter);
+  // iterate over the newRow
   for (let i = 0; i < newRow.length; i++) {
+    // find any tildes and replace them will commas
     if (newRow[i].includes("~")) {
       newRow[i] = newRow[i].replaceAll("~", ",");
     }
   }
+  //return out the final, formatted data
   return newRow;
 }
 

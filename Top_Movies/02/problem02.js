@@ -42,19 +42,28 @@ function csvToArray(str, delimiter = ",") {
 }
 
 function handleDoubleQuotes(string, delimiter) {
+  // split the string on the quotes
   const hasDoubleQuote = string.split('"');
+  // iterate over the new resulting array
   for (let i = 0; i < hasDoubleQuote.length; i++) {
+    // the characters we want to replace will only be on odd numbered indexes
     if (i % 2 !== 0) {
+      // replace all commas in this section of the string to tildes
       hasDoubleQuote[i] = hasDoubleQuote[i].replaceAll(",", "~");
     }
   }
+  // flatten the array back down into a single string
   const commasReplaced = hasDoubleQuote.join("");
+  // split the row on the commas
   let newRow = commasReplaced.split(delimiter);
+  // iterate over the newRow
   for (let i = 0; i < newRow.length; i++) {
+    // find any tildes and replace them will commas
     if (newRow[i].includes("~")) {
       newRow[i] = newRow[i].replaceAll("~", ",");
     }
   }
+  //return out the final, formatted data
   return newRow;
 }
 
@@ -63,22 +72,21 @@ const question =
 
 const movies = csvToArray(fileReader("../top_movies.csv"));
 
-// set a variable to hold highest found number
-let maxSales = 0;
-let indexOfMovie = 0;
-
-// interate over movies
-for (let i = 0; i < movies.length; i++) {
-  // check current movie usSales against known value
-  if (movies[i].usSales !== undefined && movies[i].usSales > maxSales) {
-    // if higher, store the higher value and index of current movie
-    maxSales = movies[i].usSales;
-    indexOfMovie = i;
+// filter out just Universal Pictures movies
+let universalPicturesMovies = movies.filter((movie) => {
+  if (
+    movie.distributor !== undefined &&
+    movie.distributor.includes("Universal Pictures")
+  ) {
+    return true;
   }
-}
+});
 
-// grab movie at indexOfMovie and return as the answer
+// sort the new array by US sales, longest to shortest
+universalPicturesMovies.sort((a, b) => {
+  return b.usSales - a.usSales;
+});
 
+// format the answer
 console.log(question);
-console.log(indexOfMovie);
-console.log(movies[indexOfMovie].title);
+console.log(universalPicturesMovies[0].title);
