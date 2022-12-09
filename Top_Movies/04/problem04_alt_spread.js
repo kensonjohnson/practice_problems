@@ -69,35 +69,26 @@ function handleDoubleQuotes(string, delimiter) {
   return newRow;
 }
 
-const question = "What distributor has the most films on this list? ";
+const question =
+  "What is the earliest year on this list, and what were the films from that year?";
 
 const movies = csvToArray(fileReader("../top_movies.csv"));
 
-// create map to store count from each distibutor
-let filmsByDistributor = new Map();
+// create a map to store year as an integer and films as an array of strings
+let moviesByYear = new Map();
+let lowestYear = 9999;
 
-// iterate over the movies array
+// iterate over movies
 movies.forEach((movie) => {
-  if (!movie.distributor) return;
-  // try to add each movie distributor
-  // if it does exist, increment count by one
-  // we use the logical OR to create a new value if it doesn't exist yet
-  filmsByDistributor.set(
-    movie.distributor,
-    filmsByDistributor.get(movie.distributor) + 1 || 1
-  );
-});
-
-// after loop, iterate over map, storing the key of the highest integer found
-let mostFilms = 0;
-let answer;
-filmsByDistributor.forEach((numberOfFilms, distributor) => {
-  if (numberOfFilms > mostFilms) {
-    mostFilms = numberOfFilms;
-    answer = distributor;
+  if (movie.releaseDate === undefined) return;
+  if (movie.releaseDate < lowestYear) {
+    lowestYear = movie.releaseDate;
   }
+  // Map.set year as key and film as value
+  const currentValue = moviesByYear.get(movie.releaseDate) || [];
+  moviesByYear.set(movie.releaseDate, [...currentValue, movie.title]);
 });
 
-// return that key as the answer
+// format answer
 console.log(question);
-console.log(answer);
+console.log(moviesByYear.get(lowestYear));

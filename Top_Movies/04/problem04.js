@@ -74,7 +74,26 @@ const question =
 
 const movies = csvToArray(fileReader("../top_movies.csv"));
 
-// Code here
+// variable that stores lowest year
+let lowestYear = 9999;
+// iterate over movies
+movies.forEach((movie) => {
+  // check each movie year
+  if (movie.releaseDate !== undefined && movie.releaseDate < lowestYear) {
+    lowestYear = movie.releaseDate;
+  }
+});
+
+let answer = [];
+// iterate again
+movies.forEach((movie) => {
+  // if match to lowest year, store in answer array
+  if (movie.releaseDate !== undefined && movie.releaseDate === lowestYear) {
+    answer.push(movie.title);
+  }
+});
 
 console.log(question);
-console.log(movies);
+console.log(
+  `The earliest year found is ${lowestYear} and the film(s) found for that year is(are): ${answer}`
+);
