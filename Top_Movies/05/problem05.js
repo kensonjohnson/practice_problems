@@ -74,7 +74,6 @@ const question =
 
 const movies = csvToArray(fileReader("../top_movies.csv"));
 
-// Code here
+
 
 console.log(question);
-console.log(movies);
