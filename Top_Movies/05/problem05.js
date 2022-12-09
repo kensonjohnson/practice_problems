@@ -9,7 +9,10 @@ function csvToArray(str, delimiter = ",") {
   const headers = str.slice(0, str.indexOf("\n")).trim().split(delimiter);
 
   //put all of the remaining rows into an array
-  const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+  const rows = str
+    .slice(str.indexOf("\n") + 1)
+    .trim()
+    .split(/\r?\n/);
 
   // Map the rows
   const arr = rows.map((row) => {
@@ -74,6 +77,19 @@ const question =
 
 const movies = csvToArray(fileReader("../top_movies.csv"));
 
+// create a map of ratings as keys (strings) and number of occurances as the value (integer)
+let ratings = new Map();
 
+// iterate over movies
+movies.forEach((movie) => {
+  // check that movie.rating is defined
+  if (!movie.rating) return;
+  // if it is, set movie.rating to the Map and increment its value
+  // we use the logical OR in case the value is undefined, we set it to one
+  ratings.set(movie.rating, ratings.get(movie.rating) + 1 || 1);
+});
 
+// format the answer
+console.log(movies[917]);
 console.log(question);
+console.log(ratings);
