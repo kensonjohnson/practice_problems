@@ -122,7 +122,28 @@ const question =
 
 const billboard100 = csvToArray(fileReader("../billboard100_2000.csv"));
 
-// code here
+// create a Map to store song title (key, string) and artist (value, string)
+let topSongs = new Map();
+
+// iterate over billboard100
+billboard100.forEach((song) => {
+  // check if current song has a rank and if it equals 1
+  if (song.rank && parseInt(song.rank) === 1) {
+    // if it is, check if Map has that song yet
+    if (topSongs.has(song.title)) {
+      // if it does, skip the song
+      return;
+    } else {
+      // if it does not, add the song and artist to the Map
+      topSongs.set(song.song, song.artist);
+    }
+  }
+});
 
 // format the answer
 console.log(question);
+console.log("");
+console.log("These were the number one songs of 2000:");
+topSongs.forEach((artist, song) => {
+  console.log(`"${song}" - ${artist}`);
+});

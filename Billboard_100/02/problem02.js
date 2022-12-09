@@ -122,7 +122,55 @@ const question =
 
 const billboard100 = csvToArray(fileReader("../billboard100_2000.csv"));
 
-// code here
+// create a map to hold song titles (key, String) and song objects
+let topSongs = new Map();
+let topValue = 0;
+let answer = {};
+
+// iterate over billboard100
+billboard100.forEach((song) => {
+  // check if song is rank 1
+  let newSongObject;
+  if (parseInt(song.rank) === 1) {
+    // if it is,
+    //check if song (key, string) exists in Map
+    if (topSongs.has(song.song)) {
+      // if it does,
+      // get that song object (value) and increase weeksAtTop by 1
+      const currentSongObject = topSongs.get(song.song);
+      // put that new value into the Map
+      newSongObject = {
+        title: currentSongObject.title,
+        artist: currentSongObject.artist,
+        weeksAtTop: currentSongObject.weeksAtTop + 1,
+      };
+      topSongs.set(song.song, newSongObject);
+    } else {
+      // if it does not,
+      // create a new song object with {title:String, artist:String, weeksAtTop:Integer }
+      newSongObject = {
+        title: song.song,
+        artist: song.artist,
+        weeksAtTop: 1,
+      };
+      // place that song object (value) in Map at song title (key)
+      topSongs.set(song.song, newSongObject);
+    }
+  }
+  // check if weeksAtTop is higher than current recorded topValue
+  if (newSongObject && newSongObject.weeksAtTop >= topValue) {
+    // if it is,
+    // store weeksAtTop as new topValue
+    topValue = newSongObject.weeksAtTop;
+    // store song object as answer
+    answer = newSongObject;
+  }
+});
 
 // format the answer
-console.log(question);
+console.log(question + "\n");
+
+console.log(`${answer.artist} spent the most time at the #1 spot,`);
+console.log(
+  `with their song "${answer.title}", for a total of ${answer.weeksAtTop} weeks!`
+);
