@@ -122,7 +122,33 @@ const question =
 
 const billboard100 = csvToArray(fileReader("../billboard100_2000.csv"));
 
-// code here
+// a map, that stores artist as key, and set of songs as value
+let mostTopSongs = new Map();
+// store how many songs the artist has on list
+let maxFound = 0;
+let artistWithMostSong = "";
+
+// iterate over billboard 100
+billboard100.forEach((song) => {
+  // check if artist already exist in map
+  if (mostTopSongs.has(song.artist)) {
+    // if it does, add the song to the set at key(artist)
+    mostTopSongs.set(song.artist, mostTopSongs.get(song.artist).add(song.song));
+  } else {
+    // if it doesn't exist, create a new entry
+    let songs = new Set();
+    songs.add(song.song);
+    mostTopSongs.set(song.artist, songs);
+  }
+  // compare to highest number of songs stored
+  if (mostTopSongs.get(song.artist).size > maxFound) {
+    // if higher, store new highest number and store artist name as having the most songs
+    maxFound = mostTopSongs.get(song.artist).size;
+    artistWithMostSong = song.artist;
+  }
+});
 
 // format the answer
 console.log(question);
+console.log(artistWithMostSong);
+console.log(mostTopSongs.get(artistWithMostSong));

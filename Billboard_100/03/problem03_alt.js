@@ -1,3 +1,5 @@
+// this version can handle a tie
+
 import { readFileSync } from "fs";
 
 const fileReader = function (filepath) {
@@ -118,55 +120,52 @@ function formatHeaders(headersArray) {
 }
 
 const question =
-  "What song(s) were on the charts (anywhere on the charts) for the most weeks of 2000?";
+  "What artist had the most songs chart in 2000, and what were those songs?";
 
 const billboard100 = csvToArray(fileReader("../billboard100_2000.csv"));
 
-// create Map to hold song title as key and number of occurrences as value
-const mostWeeksOnChart = new Map();
-// create variable to store the highest number of occurrences found
-let highestFound = 0;
+// a map, that stores artist as key, and set of songs as value
+let mostTopSongs = new Map();
+// store how many songs the artist has on list
+let maxFound = 0;
+let artistWithMostSongs;
 
-// iterate over billboard100
+// iterate over billboard 100
 billboard100.forEach((song) => {
-  // check if song exists in map
-  if (song.song && mostWeeksOnChart.has(song.song)) {
-    // if it does, recall the song object at that key and increment the weeksOnChart property
-    const currentSongObject = mostWeeksOnChart.get(song.song);
-    const newSongObject = {
-      title: currentSongObject.title,
-      artist: currentSongObject.artist,
-      weeksOnChart: currentSongObject.weeksOnChart + 1,
-    };
-    mostWeeksOnChart.set(song.song, newSongObject);
+  // check if artist already exist in map
+  if (mostTopSongs.has(song.artist)) {
+    // if it does, add the song to the set at key(artist)
+    mostTopSongs.set(song.artist, mostTopSongs.get(song.artist).add(song.song));
   } else {
-    // if it doesn't, create a new song object and store at key(song title)
-    const newSongObject = {
-      title: song.song,
-      artist: song.artist,
-      weeksOnChart: 1,
-    };
-    mostWeeksOnChart.set(song.song, newSongObject);
+    // if it doesn't exist, create a new entry
+    let songs = new Set();
+    songs.add(song.song);
+    mostTopSongs.set(song.artist, songs);
   }
 
-  // check if weeksOnChart at key is higher than the highestFound
-  if (mostWeeksOnChart.get(song.song).weeksOnChart > highestFound) {
-    // if it is, set highest found the that new number
-    highestFound = mostWeeksOnChart.get(song.song).weeksOnChart;
+  const numberOfSongs = mostTopSongs.get(song.artist).size;
+  // compare to highest number of songs stored
+  if (numberOfSongs > maxFound) {
+    // if higher, store new highest number and store artist name as having the most songs
+    maxFound = mostTopSongs.get(song.artist).size;
+    artistWithMostSongs = new Set();
+    artistWithMostSongs.add(song.artist);
   }
 });
 
-// format answer
+// format the answer
 console.log(question);
-console.log(
-  `The song(s) that appeared the most, with ${highestFound} weeks on the charts:`
-);
-
-// iterate over mostWeeksOnChart
-mostWeeksOnChart.forEach((song) => {
-  // check if weeksOnChart equals highestFound
-  if (song.weeksOnChart === highestFound) {
-    // if it does, print out the song title and artist to the console
-    console.log(`- ${song.title} by ${song.artist}`);
-  }
+console.log("The artist(s) with the most songs on the charts in 2000:\n");
+artistWithMostSongs.forEach((artist) => {
+  console.log(`${artist} with:`);
+  const songs = mostTopSongs.get(artist);
+  let timesAround = 1;
+  songs.forEach((song) => {
+    if (timesAround === songs.size) {
+      console.log(`and ${song}.\n`);
+    } else {
+      console.log(song + ",");
+    }
+    timesAround++;
+  });
 });
