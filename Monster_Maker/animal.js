@@ -1,8 +1,7 @@
 export default class Animal {
-  constructor(name, type, numberOfLegs, sound) {
-    this.name = name;
-    this.type = type;
-    this.numberOfLegs = numberOfLegs;
-    this.sound = sound;
+  constructor(name, numberOfLegs, sound) {
+    this.name = name || "Unknown";
+    this.numberOfLegs = parseInt(numberOfLegs) || 2;
+    this.sound = sound || "Unknown";
   }
 }
