@@ -30,9 +30,9 @@ export default function readFile(path, delimeter = ",") {
 }
 
 function getExtFromPath(string) {
-  // split the string on "."
+  // a file name should always have at least one "."
   const splitString = string.toString().trim().split(".");
-  // return the last string in the resulting array
+  // the file extension is the last item in the array
   return splitString.pop();
 }
 
@@ -41,40 +41,35 @@ function csvToArray(path, delimiter = ",") {
     return readFileSync(filepath, "utf8").toString();
   };
   const str = fileReader(path);
-  // get the first row as header data
+  //first row should be header information
   const unformattedHeaders = str
     .slice(0, str.indexOf("\n"))
     .trim()
     .split(delimiter);
   const headers = formatHeaders(unformattedHeaders);
 
-  //put all of the remaining rows into an array
+  // the remaining rows are the actual data
   const rows = str
     .slice(str.indexOf("\n") + 1)
     .trim()
     .split(/\r?\n/);
 
-  // Map the rows
+  // we want an array to return, so we use Array.map()
   const arr = rows.map((row) => {
     // split values from each row into an array
     let values = row.trim().split(delimiter);
-    // If it has double qoutes, then we have a problem
+    // If it has double qoutes, then we need further processing
     if (row.includes('"')) {
-      // This function handles formating the values if double quotes are present
       values = handleDoubleQuotes(row, delimiter);
     }
-    // use headers.reduce to create an object
+    // we are creating an object, so we use the headers array to create property names
     const el = headers.reduce((object, header, index) => {
-      // object properties derived from headers:values
       object[header] = values[index];
-
       return object;
     }, {});
-    // the object passed as an element of the array
     return el;
   });
 
-  // return the array
   return arr;
 }
 
@@ -85,22 +80,20 @@ function handleDoubleQuotes(string, delimiter) {
   for (let i = 0; i < hasDoubleQuote.length; i++) {
     // the characters we want to replace will only be on odd numbered indexes
     if (i % 2 !== 0) {
-      // replace all commas in this section of the string to tildes
+      // replace commas with tildes so String.split(delimiter) creates the array we want
       hasDoubleQuote[i] = hasDoubleQuote[i].replaceAll(",", "~");
     }
   }
-  // flatten the array back down into a single string
+  // flatten back to a string so we can split on the delimiter
   const commasReplaced = hasDoubleQuote.join("");
-  // split the row on the commas
   let newRow = commasReplaced.split(delimiter);
-  // iterate over the newRow
+
   for (let i = 0; i < newRow.length; i++) {
-    // find any tildes and replace them will commas
+    // replace tildes with commas
     if (newRow[i].includes("~")) {
       newRow[i] = newRow[i].replaceAll("~", ",");
     }
   }
-  //return out the final, formatted data
   return newRow;
 }
 
@@ -108,47 +101,40 @@ function formatHeaders(headersArray) {
   let formattedHeaders = [];
 
   headersArray.forEach((header) => {
-    // check if we have a space between words in the header
+    // a header title might multiple words
+    // we just want to convert those to camelCase
     if (header.includes(" ")) {
-      // split the word on the space
       const seperateWords = header.split(" ");
-      // get ready to store the formatted header
-      let formattedHeader = "";
-      for (let i = 0; i < seperateWords.length; i++) {
-        if ((i = 0)) {
-          //make sure the first word is all lower case
-          formattedHeader = seperateWords[0].toLowerCase();
-        } else {
-          // make sure that the remaining words all have the first letter capitalized
-          const string1 = seperateWords[i].toLowerCase();
-          formattedHeader =
-            formattedHeader +
-            string1.charAt(0).toUpperCase() +
-            string1.slice(1);
-        }
-      }
+      let formattedHeader = convertToCamelCase(seperateWords);
       return formattedHeaders.push(formattedHeader);
     }
+
+    // a header might have a dash seperating multiple words
+    // we want to remove the dash and convert to camelCase
     if (header.includes("-")) {
       const seperateWords = header.split("-");
-      let formattedHeader = "";
-      seperateWords.forEach((word) => {
-        if (word === seperateWords[0]) {
-          //make sure the first word is all lower case
-          formattedHeader = word.toLowerCase();
-        } else {
-          // make sure that the remaining words all have the first letter capitalized
-          const string1 = word.toLowerCase();
-          formattedHeader =
-            formattedHeader +
-            string1.charAt(0).toUpperCase() +
-            string1.slice(1);
-        }
-      });
+      const formattedHeader = convertToCamelCase(seperateWords);
       return formattedHeaders.push(formattedHeader);
     }
+
     // if no formatting is needed, just add it to the array
     formattedHeaders.push(header.toLowerCase());
   });
   return formattedHeaders;
+}
+
+function convertToCamelCase(arrayOfStrings) {
+  let camelCase = "";
+  arrayOfStrings.forEach((string) => {
+    if (string === arrayOfStrings[0]) {
+      //make sure the first word is all lower case
+      camelCase = string.toLowerCase();
+    } else {
+      // make sure that the remaining words all have the first letter capitalized
+      const string1 = string.toLowerCase();
+      camelCase =
+        camelCase + string1.charAt(0).toUpperCase() + string1.slice(1);
+    }
+  });
+  return camelCase;
 }
