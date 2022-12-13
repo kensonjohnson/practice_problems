@@ -1,3 +1,6 @@
+// The question is bit ambiguous,
+// so I have a variation that assumes a letter cannot appear anywhere else in the word.
+
 import readFile from "../../CustomParser.js";
 
 const scrabbleWords = readFile("../sowpods.txt");
@@ -11,7 +14,7 @@ let hasRepeats = false;
 // iterate over scrabbleWords
 scrabbleWords.forEach((word) => {
   // check if word is as long as longestFound
-  if (!word || word.length < longestFound) {
+  if (typeof word !== "string" || word.length < longestFound) {
     // if not, skip the word
     return;
   }
@@ -24,11 +27,13 @@ scrabbleWords.forEach((word) => {
 
   // check if word has repeating letters
   hasRepeats = false;
-  for (let i = 0; i < word.length - 1; i++) {
-    if (word.charAt(i) === word.charAt(i + 1)) {
+  const letters = new Set();
+  for (let i = 0; i < word.length; i++) {
+    if (letters.has(word.charAt(i))) {
       hasRepeats = true;
       break;
     }
+    letters.add(word.charAt(i));
   }
   //if it does, skip to next word
   if (hasRepeats) {
@@ -40,9 +45,5 @@ scrabbleWords.forEach((word) => {
 });
 
 console.log(question);
-console.log(`${answer.length} words fit the answer to this question.\n`);
-console.log(
-  `A sample word is: ${
-    answer[Math.floor(Math.random() * (answer.length - 1))]
-  }.\n`
-);
+console.log(`${answer.length} words fit the answer to this question:\n`);
+console.log(answer);
