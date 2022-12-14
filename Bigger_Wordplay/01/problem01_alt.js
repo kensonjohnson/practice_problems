@@ -26,22 +26,11 @@ scrabbleWords.forEach((word) => {
   }
 
   // check if word has repeating letters
-  hasRepeats = false;
-  const letters = new Set();
-  for (let i = 0; i < word.length; i++) {
-    if (letters.has(word.charAt(i))) {
-      hasRepeats = true;
-      break;
-    }
-    letters.add(word.charAt(i));
-  }
-  //if it does, skip to next word
-  if (hasRepeats) {
-    return;
-  }
+  const letters = new Set(word);
 
-  // if not, push() the word to the answer array
-  answer.push(word);
+  if (letters.size === word.length) {
+    answer.push(word);
+  }
 });
 
 console.log(question);
