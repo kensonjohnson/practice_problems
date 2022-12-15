@@ -7,7 +7,22 @@ const question =
 const example =
   "For example: \n“BOOKKEEPER” is an answer because it has a double-O, a double-K, and a double-E.\n";
 
-// code here
+// Store all of the substrings
+const substrings = ["OO", "KK", "EE"];
+
+// iterate over scrabbleWords
+const answer = scrabbleWords.filter((word) => {
+  let hasAllSubStrings = true;
+  // check if word includes substrings
+  substrings.forEach((substring) => {
+    if (!word.includes(substring)) {
+      // if it does not, we need to return false
+      hasAllSubStrings = false;
+    }
+  });
+  return hasAllSubStrings;
+});
 
 console.log(question);
 console.log(example);
+console.log(answer);
