@@ -1,3 +1,16 @@
+// Write a function that counts of the number of ships in a 2D grid.
+
+// - Input: an array of arrays of strings, representing a 2D grid. The strings are either a `"."` for open water, or an `"S"` for part of a ship. Connected `"S"`es are part of the same ship.
+// - Output: an integer that is the count of the number of ships in the grid.
+
+// Facts about ships:
+
+// - Ships are only horizontal or vertical, not diagonal.
+// - Ships have a width of one or more and a height of one or more.
+// - Ships never touch each other.
+
+// The input will always be a well-formed grid (all rows are the same length).
+
 const ships = [
   [".", "S", ".", "S"],
   [".", ".", ".", "S"],
@@ -17,7 +30,6 @@ const DIRECTIONS = [
   { x: 0, y: 1 }, //down
   { x: -1, y: 0 }, //left
 ];
-
 function countShips(arrayOfShips) {
   // create array to track where we've been
   let rows = arrayOfShips.length;
@@ -37,9 +49,7 @@ function countShips(arrayOfShips) {
       if (beenHere[y][x] === true) {
         continue;
       }
-      if (
-        walk(arrayOfShips, ".", { x: x, y: y }, { x: x + 1, y: y }, beenHere)
-      ) {
+      if (walk(arrayOfShips, ".", { x: x, y: y }, { x: x, y: y }, beenHere)) {
         numberOfShips++;
       }
     }
@@ -56,13 +66,6 @@ function countShips(arrayOfShips) {
 // returns boolean
 // }
 function walk(arrayOfShips, wall, startingPoint, currentPoint, beenHere) {
-  // Base Case
-  // Starting point is not a ship
-  if (arrayOfShips[startingPoint.y][startingPoint.x] === wall) {
-    beenHere[startingPoint.y][startingPoint.x] = true;
-    return false;
-  }
-
   // Base Case
   // Off the map
   if (
@@ -85,6 +88,17 @@ function walk(arrayOfShips, wall, startingPoint, currentPoint, beenHere) {
   }
 
   // Base Case
+  // We make it back to start
+  if (
+    currentPoint.x === startingPoint.x &&
+    currentPoint.y === startingPoint.y &&
+    beenHere[currentPoint.y][currentPoint.x]
+  ) {
+    beenHere[currentPoint.y][currentPoint.x] = true;
+    return true;
+  }
+
+  // Base Case
   // We have been here
   if (
     beenHere[currentPoint.y] &&
@@ -92,16 +106,6 @@ function walk(arrayOfShips, wall, startingPoint, currentPoint, beenHere) {
     beenHere[currentPoint.y][currentPoint.x] === true
   ) {
     return false;
-  }
-
-  // Base Case
-  // We make it back to start
-  if (
-    currentPoint.x === startingPoint.x &&
-    currentPoint.y === startingPoint.y
-  ) {
-    beenHere[currentPoint.y][currentPoint.x] = true;
-    return true;
   }
 
   // Recursion steps
@@ -132,4 +136,7 @@ function walk(arrayOfShips, wall, startingPoint, currentPoint, beenHere) {
   return false;
 }
 
+console.time("Total Time:");
+console.log(countShips(ships));
 console.log(countShips(ships2));
+console.timeEnd("Total Time:");
