@@ -80,7 +80,7 @@ function canJump2(numberArray) {
     jumpsLeft--;
 
     // if we are negative, we are further than allowed jumps
-    if (step < 0) {
+    if (jumpsLeft < 0) {
       return false;
     }
 
@@ -93,13 +93,17 @@ function canJump2(numberArray) {
   return true;
 }
 
-// console.log(canJump(test1));
-// console.log(canJump(test2));
-// console.log(canJump(test3));
-// console.log(canJump(test4));
-// console.log(canJump(test5));
+console.time("First");
+console.log(canJump(test1));
+console.log(canJump(test2));
+console.log(canJump(test3));
+console.log(canJump(test4));
+console.log(canJump(test5));
+console.timeEnd("First");
+console.time("Second");
 console.log(canJump2(test1));
 console.log(canJump2(test2));
 console.log(canJump2(test3));
 console.log(canJump2(test4));
 console.log(canJump2(test5));
+console.timeEnd("Second");
