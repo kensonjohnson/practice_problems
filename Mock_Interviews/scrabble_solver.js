@@ -90,28 +90,30 @@ function scrabbleSolver(string) {
     }
     // if match, store word as match
     if (valid) {
-      validWords.push(scrabbleWords[i]);
+      const score = generateScore(scrabbleWords[i]);
+      validWords.push({ score: score, word: scrabbleWords[i] });
     }
   }
 
-  // calculate each valid word's value
-  let bestWord = "";
-  let highestScore = 0;
+  // sort all of the valid words by score, highest to lowest.
   if (validWords.length < 1) {
-    return "No words can be generated with your current rack of letters";
+    console.log("No words can be made from the input");
+    return;
   }
-  validWords.forEach((word) => {
-    let score = 0;
-    for (let i = 0; i < word.length; i++) {
-      score = score + SCORES_MAP[word.charAt(i)];
-    }
-    if (highestScore < score) {
-      highestScore = score;
-      bestWord = word;
-    }
+  validWords.sort((a, b) => {
+    return b.score - a.score;
   });
-  // return out the best word
-  return `${bestWord} is your best choice, generating ${highestScore} points`;
+  validWords.forEach((word) => {
+    console.log(word.score, word.word);
+  });
 }
 
-console.log(scrabbleSolver("koajsbnpidcubqawe"));
+function generateScore(word) {
+  let score = 0;
+  for (let i = 0; i < word.length; i++) {
+    score = score + SCORES_MAP[word.charAt(i)];
+  }
+  return score;
+}
+
+scrabbleSolver("koajs");
