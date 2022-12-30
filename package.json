@@ -5,7 +5,7 @@
   "main": "README.md",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/kensonjohnson/practice_problems/issues"
   },
-  "homepage": "https://github.com/kensonjohnson/practice_problems#readme"
+  "homepage": "https://github.com/kensonjohnson/practice_problems#readme",
+  "devDependencies": {
+    "@babel/core": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "babel-jest": "^29.3.1",
+    "jest": "^29.3.1"
+  }
 }
