@@ -1,6 +1,11 @@
-import { LinkedListNode } from "./LinkedListNode.js";
+class LinkedListNode {
+  constructor(value, next) {
+    this.value = value;
+    this.next = next;
+  }
+}
 
-export class LinkedList {
+class LinkedList {
   constructor() {
     this.head = this.tail = null;
     this.length = 0;

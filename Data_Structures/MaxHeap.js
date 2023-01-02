@@ -100,11 +100,3 @@ class MaxHeap {
     return sum;
   }
 }
-
-const tree = new MaxHeap();
-tree.buildHeap([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-console.log(tree.getMax());
-console.log(tree.sumTotal);
-tree.insert(52);
-console.log(tree.heap);
-console.log(tree.sumTotal);
