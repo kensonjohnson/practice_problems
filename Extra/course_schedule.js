@@ -24,15 +24,15 @@ var canFinish = function (numCourses, prerequisites) {
   let completed = 0;
   while (queue.length) {
     const course = queue.shift();
-    // if any courses require current course
+    // if any other courses require current course
     if (preReqs.has(course)) {
-      for (const reqiured of preReqs.get(course)) {
+      for (const req of preReqs.get(course)) {
         // remove from that course's reqs, because we know we can complete current
-        howManyReqs[reqiured]--;
-        if (howManyReqs[reqiured] === 0) {
+        howManyReqs[req]--;
+        if (howManyReqs[req] === 0) {
           // if that course has no more requirements, we know we can complete it,
           // so we queue it up to increment the count
-          queue.push(reqiured);
+          queue.push(req);
         }
       }
     }
