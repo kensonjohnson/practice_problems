@@ -35,6 +35,50 @@ function wordPattern(pattern, input) {
   return true;
 }
 
-console.log(wordPattern(pattern, input));
-console.log(wordPattern(pattern2, input2));
-console.log(wordPattern(pattern3, input3));
+// get how many tokens exist
+function howManyKeys(pattern) {
+  const keys = new Set(pattern);
+  return keys.size;
+}
+
+function hardWordPattern(pattern, input) {
+  const tokens = new Map();
+  const n = input.length;
+  const numberOfTokens = howManyKeys(pattern);
+  const keys = pattern.split("");
+  const tokensPerKey = getTokensPerKey(pattern);
+
+  let currentWord = "";
+  for (let i = 1; i <= n; i++) {
+    const currentToken = input.slice(0, i);
+    const subString = input.slice(i);
+    if (subString.includes(currentToken)) {
+      currentWord = currentToken;
+    } else {
+      break;
+    }
+  }
+}
+
+function getTokensPerKey(pattern) {
+  const keys = new Map();
+  for (let i = 0; i < pattern.length; i++) {
+    const key = pattern.charAt(i);
+    if (!keys.has(key)) {
+      keys.set(key, []);
+    }
+    keys.get(key).push(i);
+  }
+  return keys;
+}
+// slice the string, in increasing windows
+// check if that word exists later in the string,
+// store that as a possibility
+// repeat until the process breaks,
+// store the largest as a word
+// if none found, splice letter at index 0 and store it in the current key
+// repeat the process
+// if a word is found, previously found characters are a token,
+// and new word found is a token
+
+// console.log(tokensPerKey("abba"));
