@@ -46,99 +46,35 @@ const nums8 = [9, 9, 2, 8, 7],
   k8 = 4;
 // Expect 3
 
-/**
- * @param {number[]} nums
- * @param {number} k
- * @return {number}
- */
 var smallestRangeII = function (nums, k) {
-  // store currentHighest, currentLowest, and average
-  let lowest = 100000;
-  let highest = 0;
-  const numbers = new Set(nums);
-  numbers.forEach((number) => {
-    if (number < lowest) {
-      lowest = number;
-    }
-    if (number > highest) {
-      highest = number;
-    }
-  });
-  const outerRange = highest - lowest;
-  if (outerRange <= k) {
-    return outerRange;
+  // how many elements
+  let n = nums.length;
+
+  // Sort, lowest to highest
+  nums.sort((a, b) => a - b);
+
+  // Base case, all incremented OR all decremented
+  // This is found by subtracting the smallest number from the largest
+  let score = nums[n - 1] - nums[0];
+
+  // Save as a possible answer
+  let ans = score;
+
+  // Both sets will be non-empty
+  for (let divisor = 0; divisor < n - 1; divisor++) {
+    // Compute maximum and minimum after partitioning
+    let maximumAfterDivision = Math.max(nums[divisor] + k, nums[n - 1] - k);
+    let minimumAfterDivision = Math.min(nums[divisor + 1] - k, nums[0] + k);
+
+    // Score after dividing here
+    score = maximumAfterDivision - minimumAfterDivision;
+
+    // ans will be minimum score
+    ans = Math.min(ans, score);
   }
 
-  if (k * 2 > outerRange) {
-    let smallestRangeFound = 0;
-    let rangeAdjustment = k;
-    const problemNumbers = [];
-    const overlap = k * 2 - outerRange;
-    if (k + overlap > outerRange) {
-      return outerRange;
-    }
-    if (highest - k < lowest + k) {
-      smallestRangeFound = highest - k - (lowest + k);
-    }
-
-    // get all of our problem numbers
-    for (let i = 0; i < overlap; i++) {
-      const possibleNumber = lowest + k - i;
-      if (numbers.has(possibleNumber)) {
-        problemNumbers.push(possibleNumber);
-      }
-    }
-
-    problemNumbers.forEach((number) => {
-      if (!numbers.has(number)) {
-        return;
-      }
-      if (number + k > highest && number - k < lowest) {
-        const currentRangeAdjustment = Math.min(
-          Math.abs(lowest - (number - k)),
-          number + k - highest
-        );
-        if (currentRangeAdjustment + k > rangeAdjustment) {
-          rangeAdjustment = currentRangeAdjustment + k;
-        }
-      }
-    });
-    return smallestRangeFound + rangeAdjustment;
-  }
-  const newHigh = highest - k;
-  const newLow = lowest + k;
-  let smallestRangeFound = newHigh - newLow;
-  if (smallestRangeFound < k) {
-    const problemNumbers = [];
-    const overlap = k - smallestRangeFound;
-
-    // get all of our problem numbers
-    for (let i = 0; i < overlap; i++) {
-      const possibleNumber = lowest + k - i;
-      if (numbers.has(possibleNumber)) {
-        problemNumbers.push(lowest + k - i);
-      }
-    }
-
-    let adjustLow = 0;
-    let adjustHigh = 0;
-    problemNumbers.forEach((number) => {
-      if (number + k > newHigh && number - k < newLow) {
-        const high = number + k - newHigh;
-        const low = Math.abs(number - k + newLow);
-        if (high < low && high > adjustHigh) {
-          adjustHigh = high;
-          return;
-        }
-        if (low < adjustLow) {
-          adjustLow = low;
-        }
-      }
-    });
-    return newHigh + adjustHigh - (newLow - adjustLow);
-  }
-
-  return highest - k - (lowest + k);
+  // return answer
+  return ans;
 };
 
 console.log(smallestRangeII(nums, k));
