@@ -99,17 +99,26 @@ function test(expected, recieved) {
   return `Recieved ${recieved} ${expected === recieved ? "✅" : "❌"}`;
 }
 
-console.log('check("1", "1")', "Expect true: ", test(true, check("1", "1")));
-console.log(
-  '\ncheck("1.3", "1, 1.3")',
-  "Expect true: ",
-  test(true, check("1.3", "1, 1.3"))
-); // Expect true
-console.log(
-  '\ncheck("1", "3")',
-  "Expect false: ",
-  test(false, check("1", "3"))
-); // Expect false
+console.table([
+  {
+    check: '("1", "1")',
+    expected: true,
+    recieved: test(true, check("1", "1")),
+  },
+  {
+    check: '("1.3", "1, 1.3")',
+    expected: true,
+    recieved: test(true, check("1.3", "1, 1.3")),
+  },
+]);
+// console.table([
+//   {
+//     check: '("1.3", "1, 1.3")',
+//     expected: "Expect true: ",
+//     recieved: test(true, check("1.3", "1, 1.3")),
+//   },
+// ]); // Expect true
+console.log('check("1", "3")', "Expect false: ", test(false, check("1", "3"))); // Expect false
 console.log(
   '\ncheck("1.7", "2, 2.8")',
   "Expect false: ",
