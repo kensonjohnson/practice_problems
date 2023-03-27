@@ -55,8 +55,6 @@ var longestCycleDFS = function (edges) {
 
     if (edges[node] >= 0)
       return detectCycles(edges, visited, connections, edges[node], length + 1);
-
-    connections.delete(node);
   }
   return longestCycleFound;
 };
