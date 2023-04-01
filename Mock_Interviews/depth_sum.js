@@ -10,9 +10,7 @@ function depthSum(element, level = 1) {
   let integerSum = 0;
   // filter out the nested arrays into a sub-array
   element.forEach((element) => {
-    if (typeof element === "number") {
-      return (integerSum += element * level);
-    }
+    if (typeof element === "number") return (integerSum += element * level);
     integerSum += depthSum(element, level + 1);
   });
 
