@@ -57,6 +57,3 @@ function sumGrandChildren(node) {
     sum += node.left.left.val;
   }
 }
-
-console.log(sumEvenGrandparent(root1));
-console.log(sumEvenGrandparent(root2));
