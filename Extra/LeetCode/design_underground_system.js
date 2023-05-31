@@ -54,7 +54,11 @@ class UndergroundSystem {
       totalTime: totalTime + (t - checkInData.t),
       count: count + 1,
     });
+
+    // Finally, we can delete the check-in from the customer
+    this.customers.delete(id);
   }
+
   getAverageTime(startStation, endStation) {
     // Generate the trip name and get the data for that trip
     const { totalTime, count } = this.tripTimes.get(
