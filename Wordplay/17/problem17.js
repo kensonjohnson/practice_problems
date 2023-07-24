@@ -1,10 +1,10 @@
 const question =
   "What are all of the letters that never appear consecutively in an English word?";
 
-const fs = require("fs");
+import { readFileSync } from "fs";
 
 const fileReader = function (filepath) {
-  return fs.readFileSync(filepath, "utf8").toString().trim().split(/\r?\n/);
+  return readFileSync(filepath, "utf8").toString().trim().split(/\r?\n/);
 };
 
 const scrabbleWords = fileReader("../sowpods.txt");
@@ -66,6 +66,27 @@ function findNonConsecutiveLetters(arrayToSearch, arrayOfLetters) {
   }
   return nonConsecutiveLetters;
 }
-answer = findNonConsecutiveLetters(scrabbleWords, substrings);
-console.log(question);
-console.log(answer);
+// answer = findNonConsecutiveLetters(scrabbleWords, substrings);
+// console.log(question);
+// console.log(answer);
+
+function findNonConsecutiveLetters2(words) {
+  const letters = new Set();
+
+  for (const word of words) {
+    const wordLength = word.length;
+
+    for (let i = 0; i < wordLength - 1; i++) {
+      const currentLetter = word[i];
+      const nextLetter = word[i + 1];
+
+      if (currentLetter !== nextLetter) {
+        letters.add(currentLetter);
+      }
+    }
+  }
+
+  return Array.from(letters).sort();
+}
+
+console.log(findNonConsecutiveLetters2(scrabbleWords));
