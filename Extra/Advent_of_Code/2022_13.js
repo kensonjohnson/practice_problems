@@ -152,19 +152,40 @@ const test = [
 function isRightOrder(left, right) {
   // Base Case 1
   // if both are numbers
-  // return left <= right
+  if (typeof left === "number" && typeof right === "number") {
+    return left <= right;
+  }
+
   // Base Case 2
-  // if either are negative
+  // if either are undefined
   // if left defined and right undefined, return false
   // if left undefined and right defined, return true
+  if (typeof left === "undefined" && typeof right !== "undefined") {
+    return true;
+  }
+  if (typeof left !== "undefined" && typeof right === "undefined") {
+    return false;
+  }
+
   // Base Case 3 = Maybe
   // if both undefined, return true
+  if (typeof left === "undefined" && typeof right === "undefined") {
+    return true;
+  }
+
   // confirm a is list or cast
+  if (typeof left === "number") {
+    left = [left];
+  }
   // confirm b is list or cast
+  if (typeof right === "number") {
+    right = [right];
+  }
   // set index to 0
-  // while ( continue )
-  // recurse
-  // continue = isRightOrder(a, b)
-  // increment index
+  let leftIndex = 0;
+  let rightIndex = 0;
+  let inRightOrder = true;
+  // Check each element in left and right
+
   // return continue
 }
