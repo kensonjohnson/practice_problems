@@ -1,3 +1,5 @@
+// LRUcache on LeetCode
+
 class LimitedDictionary {
   constructor(limit) {
     this.limit = limit;
@@ -12,9 +14,7 @@ class LimitedDictionary {
     // return value
   }
 
-  put(key, value) {
-
-  }
+  put(key, value) {}
 }
 
 class DoublyLinkedList {
@@ -27,7 +27,6 @@ class DoublyLinkedList {
 
   append(node) {
     // null checking of value handled by outer class
-   
 
     if (this.head === null || this.tail === null) {
       this.head = node;
@@ -51,12 +50,12 @@ class DoublyLinkedList {
     this.head = node;
     // remove the last
 
-    const lastNode = this.tail.prev
-    lastNode.next = null
-    this.tail = lastNode
+    const lastNode = this.tail.prev;
+    lastNode.next = null;
+    this.tail = lastNode;
   }
 
-  updateItem(){}
+  updateItem() {}
 }
 
 class Node {
