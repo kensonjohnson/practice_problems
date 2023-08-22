@@ -35,38 +35,73 @@ const numCourses = 4,
  * @return {number[]}
  */
 var findOrder = function (numCourses, prerequisites) {
+  // To prepare for Kahn's algorithm, we need a set of start nodes with no incoming edges:
+  // We start by creating an adjacency list and an array that tracks the number of incoming edges for each node.
   const adjList = new Map();
-  // iterate over prerequisites
+  const incomingEdges = new Array(numCourses).fill(0);
   for (const [courseNumber, requirement] of prerequisites) {
     // map all courses with an array of their requirements
-    const currentList = adjList.get(courseNumber) || [];
-    currentList.push(requirement);
-    adjList.set(courseNumber, currentList);
+    const currentList = adjList.get(requirement) || [];
+    currentList.push(courseNumber);
+    adjList.set(requirement, currentList);
+    // increment incomingEdges for each course
+    incomingEdges[courseNumber]++;
   }
 
-  // create an set for order of courses
-  const orderReversed = new Set();
-  // pass in numcourses - 1 and array to evaluateRequirements
-  evaluateRequirements(numCourses - 1, orderReversed, adjList);
+  // Now we can create the set of start nodes:
+  // In this case, we can use a queue to keep track of the nodes with no incoming edges.
+  const queue = [];
+  // iterate over incomingEdges
+  for (let i = 0; i < incomingEdges.length; i++) {
+    // if no incoming edges, push to queue
+    if (incomingEdges[i] === 0) {
+      queue.push(i);
+    }
+  }
 
-  // convert orderReversed to array and reverse to proper order
-  const answer = Array.from(orderReversed).reverse();
-  // return answer array
-  return answer;
+  // Now we can start the algorithm:
+  const answerArray = [];
+  // We iterate over the queue until it is empty.
+  while (queue.length) {
+    // We start by removing a node from the queue and adding it to the sorted list.
+    const currentCourse = queue.shift();
+    answerArray.push(currentCourse);
+    // Next we check if the node has any neighbors.
+    const children = adjList.get(currentCourse);
+    if (!children) continue;
+    // We then iterate over the node's neighbors and remove the edges from the graph.
+    for (const child of children) {
+      incomingEdges[child]--;
+      // If a neighbor has no more incoming edges, we add it to the queue.
+      if (incomingEdges[child] === 0) {
+        queue.push(child);
+      }
+    }
+  }
+
+  // Finally, we check if the graph still has edges:
+  // If it does, then there is at least one cycle and the topological sort is not possible.
+  // Otherwise, we return the sorted list.
+  return numCourses === answerArray.length ? answerArray : [];
 };
 
-function evaluateRequirements(courseNumber, answerSet, adjList) {
-  // push courseNumber to answerArray
-  answerSet.add(courseNumber);
-  // iterate over requirements for course
-  const children = adjList.get(courseNumber);
-  if (!children) {
-    return;
-  }
-  for (const child of children) {
-    // call evaluateRequirements on each requirement
-    evaluateRequirements(child, answerSet, adjList);
-  }
-}
-
 console.log(findOrder(numCourses, prerequisites));
+
+// https://en.wikipedia.org/wiki/Topological_sorting
+//
+// Kahns Algorithm
+// L ← Empty list that will contain the sorted elements
+// S ← Set of all nodes with no incoming edge
+
+// while S is not empty do
+//     remove a node n from S
+//     add n to L
+//     for each node m with an edge e from n to m do
+//         remove edge e from the graph
+//         if m has no other incoming edges then
+//             insert m into S
+
+// if graph has edges then
+//     return error   (graph has at least one cycle)
+// else
+//     return L   (a topologically sorted order)
