@@ -1,14 +1,6 @@
 const question =
   "Write a function that takes a string word as the first argument, a string letter as the second argument, and returns a count of how many times letter occurs in word.";
 
-import { readFileSync } from "fs";
-
-const fileReader = function (filepath) {
-  return readFileSync(filepath, "utf8").toString().trim().split(/\r?\n/);
-};
-
-const scrabbleWords = fileReader("../sowpods.txt");
-
 function howManyLetters(word, letter) {
   const toSearch = word.toUpperCase();
   const toFind = letter.toUpperCase();
@@ -22,5 +14,10 @@ function howManyLetters(word, letter) {
   return numberOfTimes;
 }
 
-console.log(question);
-console.log(howManyLetters("Aardvark", "A"));
+const myWord = 'alibaba';
+
+console.log("Start reduce")
+console.log(myWord.split("").reduce((sum, letter)=>{ return sum + (letter === "a")}, 0)) 
+
+// console.log(question);
+// console.log(howManyLetters("Aardvark", "A"));
